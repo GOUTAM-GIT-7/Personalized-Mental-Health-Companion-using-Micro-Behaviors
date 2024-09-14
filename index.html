@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat API</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Chat API with Node.js</h1>
+    <textarea id="queryInput" placeholder="Type your query here..."></textarea>
+    <button id="submitQueryBtn">Submit Query</button>
+    <div id="responseContainer"></div>
+  </div>
+
+  <script>
+    document.getElementById('submitQueryBtn').addEventListener('click', async () => {
+      const queryInput = document.getElementById('queryInput').value;
+      const responseContainer = document.getElementById('responseContainer');
+
+      if (!queryInput.trim()) {
+        responseContainer.textContent = 'Please enter a query.';
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userQuery: queryInput })
+        });
+        const data = await response.json();
+        responseContainer.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        responseContainer.textContent = 'Error submitting query.';
+      }
+    });
+  </script>
+</body>
+</html>
